@@ -13,16 +13,22 @@ export default function Home() {
       <main>
 
       <Flex>
-        <Box p='4' bg='red.400'>
+        <Box width="100%" bg='red.400'>
           Box 1
         </Box>
         <Spacer />
-        <Box p='4' bg='green.400'>
+      </Flex>
+      <Flex>
+        <Box width="100%" bg='red.400'>
+          Box 1
+        </Box>
+        <Spacer />
+      </Flex>
+{/*       <Box p="100%" bgGradient="radial(gray.300, yellow.400, pink.200)"> 
           Box 2
         </Box>
-      </Flex>
-      
-      <p>Buzz</p>
+       */}
+
 
       <Image
         src="/medias/619b93b0a2cec2241f7ac118_in20008151.webp"
