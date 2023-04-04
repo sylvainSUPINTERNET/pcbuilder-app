@@ -2,23 +2,32 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { Box, Flex, Spacer } from '@chakra-ui/react'
+import { Box, Flex, Spacer, Text } from '@chakra-ui/react'
 import { Customheader } from '@/components/header'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { SupbaseContext } from '@/providers/SupabaseContext'
 
 
 const inter = Inter({ subsets: ['latin'] })
 
 
-
-export default function Home() {
-
+export default function Home({data}:any) {
   const { supabaseClient, _setSupabaseClient }:any = useContext(SupbaseContext);
 
+  const [components, setComponents] = useState<any>([]);
+  
 
   useEffect( () => {
-    console.log(supabaseClient);
+
+    const fetchComponents = async () => {
+      const data = supabaseClient.from('components').select('*');
+      setComponents(data);
+      console.log(data);
+    }
+
+
+    fetchComponents();
+
   }, [])
 
   return (
@@ -39,6 +48,8 @@ export default function Home() {
           </Box>
           <Spacer />
         </Flex>
+
+        <Text>{JSON.stringify(components)}</Text>
 
       <Image
         src="/medias/619b93b0a2cec2241f7ac118_in20008151.webp"
