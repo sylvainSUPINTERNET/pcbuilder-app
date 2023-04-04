@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
@@ -20,7 +19,22 @@ export default function Home({data}:any) {
   useEffect( () => {
 
     const fetchComponents = async () => {
-      const data = supabaseClient.from('components').select('*');
+      // const data = await supabaseClient
+      // .from('components')
+      // .eq('category', 'GPU')
+      // .select('*')
+      // .sort('constructor_brand', { ascending: true })
+      // .range(0, 25);
+      // setComponents(data);
+      // console.log(data);
+
+      const data = await supabaseClient
+        .from('components')
+        .select("category, constructor_brand, label")
+        .eq("category", "GPU")
+        .order('constructor_brand', { ascending: true })
+        .range(0, 25)
+
       setComponents(data);
       console.log(data);
     }
