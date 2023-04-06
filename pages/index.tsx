@@ -19,14 +19,13 @@ export default function Home({data}:any) {
   useEffect( () => {
 
     const fetchComponents = async () => {
-      // const data = await supabaseClient
-      // .from('components')
-      // .eq('category', 'GPU')
-      // .select('*')
-      // .sort('constructor_brand', { ascending: true })
-      // .range(0, 25);
-      // setComponents(data);
-      // console.log(data);
+
+      // https://supabase.com/docs/guides/database/functions
+      const cat = await supabaseClient
+        .rpc("get_components_categories")
+
+      console.log("cat", cat);
+
 
       const data = await supabaseClient
         .from('components')
