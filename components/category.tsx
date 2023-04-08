@@ -69,7 +69,6 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             // can't use filter without warning ( can't covnert into array !)
             cacheIndex.forEach( (indexInCache:number) => {
                 if ( !openIndexes.includes(indexInCache) ) {
-                    console.log("Remove from cache", indexInCache);
                     cacheIndex.delete(indexInCache);
                 }
             });
@@ -77,7 +76,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             openIndexes.map( async (index:number) => {
 
                 if ( cacheIndex.has(index) ) {
-                    console.log(`ignore ${index} ( cached )`);
+                    // do not need to call again ( tab is still open )
                     return;
                 };
 
