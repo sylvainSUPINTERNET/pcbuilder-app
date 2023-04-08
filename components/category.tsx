@@ -9,7 +9,7 @@ import { Box, Flex, Accordion,
   List,
   ListItem,
   ListIcon} from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 
 type FetchComponentsCategoryProps = {
@@ -59,37 +59,29 @@ const getProperCatName = (cat:string) : string => {
 
 export const FetchComponentsCategory = ({categories, supabaseClient}:FetchComponentsCategoryProps) => {
 
-    let cacheIndex:Set<number> = new Set();
+    const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
 
-    const handleAccordionChange = (openIndexes:any) => {
+    // One the first time we click on tab, data is stored into state for caching and if we reclick , just get data from it, call is not required
+    const handleAccordionChange = async (openIndexes:any) => {
+        let cache: Map<number, any> = new Map(cacheDataComponents);
 
         if ( openIndexes.length > 0 ) {
+            // ! map not working as expected when using async / await inside
 
-
-            // can't use filter without warning ( can't covnert into array !)
-            cacheIndex.forEach( (indexInCache:number) => {
-                if ( !openIndexes.includes(indexInCache) ) {
-                    cacheIndex.delete(indexInCache);
-                }
-            });
-
-            openIndexes.map( async (index:number) => {
-
-                if ( cacheIndex.has(index) ) {
+            for ( let index of openIndexes ) {
+                if ( cache.has(index) ) {
                     // do not need to call again ( tab is still open )
-                    return;
-                };
+                } else {
+                    const {data, error} = await componentsRepository.getComponentsByCategory(supabaseClient, categories[index]);
+                    cache.set(index, data);    
+                }
 
-                const {data, error} = await componentsRepository.getComponentsByCategory(supabaseClient, categories[index]);
 
-                console.log(data);
-
-                cacheIndex.add(index);
-            });
+            }
             
         }
-
-        
+        // update reference
+        setCacheDataComponents(new Map(cache));
     }
 
     useEffect( () => {
@@ -99,6 +91,8 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     return ( 
         <>
             <Accordion allowMultiple onChange={handleAccordionChange}>
+
+                {cacheDataComponents.size}
 
             {
             categories.map((category:string) => {
