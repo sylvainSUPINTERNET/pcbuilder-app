@@ -24,7 +24,6 @@ export default function Home({data}:any) {
       const cat = await supabaseClient
         .rpc("get_components_categories")
 
-      console.log("cat", cat);
 
 
       const data = await supabaseClient
