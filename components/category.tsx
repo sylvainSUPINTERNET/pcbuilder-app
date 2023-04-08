@@ -57,6 +57,8 @@ const getProperCatName = (cat:string) : string => {
 }
 
 
+
+// TODO : for cache could consider redis instead ( with TTL key ) but since values are not changing often, it's not a big deal
 export const FetchComponentsCategory = ({categories, supabaseClient}:FetchComponentsCategoryProps) => {
 
     const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
@@ -80,7 +82,9 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             }
             
         }
-        // update reference
+
+        console.log(cache)
+        // update reference 
         setCacheDataComponents(new Map(cache));
     }
 
@@ -91,8 +95,6 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     return ( 
         <>
             <Accordion allowMultiple onChange={handleAccordionChange}>
-
-                {cacheDataComponents.size}
 
             {
             categories.map((category:string) => {
