@@ -8,15 +8,59 @@ import { Box, Flex, Accordion,
   Img,
   List,
   ListItem,
-  ListIcon} from '@chakra-ui/react';
+  ListIcon,
+  useMediaQuery,
+  Icon} from '@chakra-ui/react';
+import { GiPointySword } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
+
 
 type FetchComponentsCategoryProps = {
     categories: Array<string>;
     supabaseClient: any;
 };
+
+
+const displayComponentLevel = (marketPrice:string, category:string) => {
+    // GiPunchBlast => bad
+    // GiPointySword => medium
+    // GiAk47 => good
+    // GiUfo => very good
+
+    // GiCrackedSaber => dogshit
+
+    // TODO implements rules
+
+    return ( 
+        <Box
+            w={10}
+            h={10}
+            bgGradient="linear(to-r, #7928CA, #FF0080)"
+            borderRadius="full"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+            shadow="xl">
+                <Icon as={GiPointySword} w={6} h={6} color="white" />
+        </Box>
+    )
+    
+}
+
+
+const displayAsPrice = (price:string) : string => {
+
+    const formattedPrice = (parseInt(price) / 100).toLocaleString("fr-FR", {
+      style: "currency",
+      currency: "EUR",
+    });
+
+    return formattedPrice;
+
+}
 
 
 const getProperCatName = (cat:string) : string => {
@@ -61,6 +105,10 @@ const getProperCatName = (cat:string) : string => {
 
 // TODO : for cache could consider redis instead ( with TTL key ) but since values are not changing often, it's not a big deal
 export const FetchComponentsCategory = ({categories, supabaseClient}:FetchComponentsCategoryProps) => {
+
+    const [isLargerThanTablet] = useMediaQuery("(min-width: 48em)");
+    const flexBasis = isLargerThanTablet ? "25%" : "50%";
+
 
     const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
 
@@ -110,6 +158,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                                 {getProperCatName(category)}
                             </Text>
                         </Box>
+
                         <AccordionIcon />
                         </AccordionButton>
                     </h2>
@@ -118,9 +167,29 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     <Flex direction="row" flexWrap={"wrap"} justifyContent={"center"}>
                     {
                         cacheDataComponents.get(index) && cacheDataComponents.get(index).map((component:any) => {
-                                return (<Box flexBasis="25%" p={2}>
-                                    {component.label}
-                                    <Image src={`/medias/${component.hash}_${component.media_path.split("_")[component.media_path.split("_").length-1]}`} alt={`${component.label}`} width={160} height={160} />
+                                return (
+                                <Box flexBasis={flexBasis} p={4} mb={10} borderWidth={1}>
+                                    <Box display="flex" justifyContent="center" p={4}>
+                                        <Text as='b' fontSize="xl">{component.label}</Text>
+                                    </Box>
+                                    <Box display="flex" justifyContent="center">
+                                        <Image src={`/medias/${component.hash}_${component.media_path.split("_")[component.media_path.split("_").length-1]}`} alt={`${component.label}`} width={160} height={160} />
+                                    </Box>
+                                    <Box display="flex" justifyContent="end" p={4}>
+                                        {displayComponentLevel(component.price_market, component.category)}
+                                    </Box>
+                                    
+                                    <Box display="flex" justifyContent="center" mt={2}>
+                                        <Text as='b'>Estimé à 
+                                            <Box bgGradient="linear(to-l, #ff00cc,#333399)" 
+                                            bgClip="text"
+                                            fontSize="6xl"
+                                            fontWeight="extrabold">
+                                                {displayAsPrice(component.price_market)}
+                                            </Box>
+                                        </Text>
+                                    </Box>
+
                                 </Box>)
                             })
                     }
