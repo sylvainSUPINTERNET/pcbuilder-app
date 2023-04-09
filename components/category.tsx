@@ -1,4 +1,5 @@
 import { MdCheckCircle, MdSettings } from 'react-icons/md';
+import { motion } from "framer-motion";
 import { Box, Flex, Accordion,
     Text,
   AccordionItem,
@@ -10,12 +11,27 @@ import { Box, Flex, Accordion,
   ListItem,
   ListIcon,
   useMediaQuery,
-  Icon} from '@chakra-ui/react';
-import { GiPointySword } from 'react-icons/gi';
+  Icon,
+  Stack,
+  Divider,
+  Skeleton,
+  Heading} from '@chakra-ui/react';
+import { GiElfHelmet, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
+import {RiSeparator} from 'react-icons/ri';
 
+import { extendTheme } from '@chakra-ui/react'
+
+const theme = extendTheme({
+  fonts: {
+    heading: `Montserrat, sans-serif`,
+    body: `'Body Font Name', sans-serif`,
+  },
+})
+
+export default theme
 
 type FetchComponentsCategoryProps = {
     categories: Array<string>;
@@ -37,15 +53,16 @@ const displayComponentLevel = (marketPrice:string, category:string) => {
         <Box
             w={10}
             h={10}
-            bgGradient="linear(to-r, #7928CA, #FF0080)"
+            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)"
             borderRadius="full"
             display="flex"
             justifyContent="center"
             alignItems="center"
             backdropFilter="blur(10px) brightness(150%) saturate(120%)"
             shadow="xl">
-                <Icon as={GiPointySword} w={6} h={6} color="white" />
+                <Icon as={GiPointySword} w={6} h={6} color="black" />
         </Box>
+
     )
     
 }
@@ -143,13 +160,98 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
 
     return ( 
         <>
-            <Accordion allowMultiple onChange={handleAccordionChange}>
+{/* 
+            <Box
+                position="fixed"
+                top={0}
+                bottom={0}
+                left={0}
+                right={0}
+                overflow="hidden"
+                zIndex={-1}
+                >
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    style={{
+                    minWidth: "100%",
+                    minHeight: "100%",
+                    objectFit: "cover",
+                    }}
+                >
+                    <source src="/home_cutted.mp4" type="video/mp4" />
+                </video>
+                <Box
+                    bg="rgba(0,0,0,0.5)"
+                    position="absolute"
+                    top={0}
+                    bottom={0}
+                    left={0}
+                    right={0}
+                /> */}
+                {/* Your content goes here */}
+                {/* </Box> */}
 
+            
+            {/* container */}
+            {/* <Box style={{ backgroundColor: 'rgba(255, 255, 255, 0.0)', backdropFilter: 'blur(10px)' }}> */}
+            <Box>
+                <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
+                    <Heading as={"cite"}>"Je veux monter mon PC, mais je n'y connais rien"</Heading>
+                </Flex>
+
+                <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
+                    <Text as={"b"}>On est là pour toi !</Text>
+                </Flex>
+
+                
+                <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
+                    <Text as={"b"}>Pas de technique ici, tu choisis tes composants selon notre système de notation</Text>
+                </Flex>
+
+            </Box>
+
+
+            <Flex justifyContent={"center"}>
+                    <Box flexBasis={"25%"} background="red">1</Box>
+                    <Box flexBasis={"25%"} background="red">2</Box>
+                    <Box flexBasis={"25%"} background="red">3</Box>
+                    <Box flexBasis={"25%"} background="red">3</Box>
+                </Flex>
+
+
+                <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} >
+
+                    <Box flexBasis={"25%"} m={1}>
+                        <Text color="black">CPU</Text>
+                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                    </Box>
+
+                    <Box flexBasis={"25%"} m={1}>
+                        <Text color="black">CPU</Text>
+                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                    </Box>
+                    
+                    <Box flexBasis={"25%"} m={1}>
+                        <Text color="black">CPU</Text>
+                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                    </Box>
+
+                    <Box flexBasis={"25%"} m={1}>
+                        <Text color="black">CPU</Text>
+                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                    </Box>
+
+                </Flex>
+
+
+            <Accordion allowMultiple onChange={handleAccordionChange}>
             {
                 categories.map((category:string, index:number) => {
 
                 return ( 
-                <AccordionItem>
+                <AccordionItem background={"green"}>
 
                     <h2>
                         <AccordionButton>
