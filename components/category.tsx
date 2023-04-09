@@ -11,6 +11,7 @@ import { Box, Flex, Accordion,
   ListIcon} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
+import Image from "next/image";
 
 type FetchComponentsCategoryProps = {
     categories: Array<string>;
@@ -97,7 +98,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             <Accordion allowMultiple onChange={handleAccordionChange}>
 
             {
-            categories.map((category:string) => {
+                categories.map((category:string, index:number) => {
 
                 return ( 
                 <AccordionItem>
@@ -115,21 +116,14 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
 
                     <AccordionPanel pb={4}>
                     <Flex direction="row" flexWrap={"wrap"} justifyContent={"center"}>
-                        <Box flexBasis="25%" p={2}>
-                            Item 1
-                        </Box>
-                        <Box flexBasis="25%" p={2}>
-                            Item 1
-                        </Box>
-                        <Box flexBasis="25%" p={2}>
-                            Item 1
-                        </Box>
-                        <Box flexBasis="25%" p={2}>
-                            Item 1
-                        </Box>
-                        <Box flexBasis="25%" p={2}>
-                            Item 2
-                        </Box>
+                    {
+                        cacheDataComponents.get(index) && cacheDataComponents.get(index).map((component:any) => {
+                                return (<Box flexBasis="25%" p={2}>
+                                    {component.label}
+                                    <Image src={`/medias/${component.hash}_${component.media_path.split("_")[component.media_path.split("_").length-1]}`} alt={`${component.label}`} width={160} height={160} />
+                                </Box>)
+                            })
+                    }
                     </Flex>
 {/*                         <List spacing={3}>
                             
