@@ -16,27 +16,86 @@ import { Box, Flex, Accordion,
   Divider,
   Skeleton,
   Heading} from '@chakra-ui/react';
-import { GiElfHelmet, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
+import { GiAk47, GiBaseballBat, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
 import {RiSeparator} from 'react-icons/ri';
 
-import { extendTheme } from '@chakra-ui/react'
-
-const theme = extendTheme({
-  fonts: {
-    heading: `Montserrat, sans-serif`,
-    body: `'Body Font Name', sans-serif`,
-  },
-})
-
-export default theme
-
 type FetchComponentsCategoryProps = {
     categories: Array<string>;
     supabaseClient: any;
 };
+
+
+const lowLevel = (iconSize:number=6, iconContainerSize:number=10) => {
+    return ( 
+        <Box
+            w={iconContainerSize}
+            h={iconContainerSize}
+            bgGradient="radial-gradient(circle, rgba(203, 203, 207, 0.84) 0%, rgba(89, 93, 140, 0) 100%)"
+            borderRadius="full"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+            shadow="xl">
+            <Icon as={GiBaseballBat} w={iconSize} h={iconSize} color="black" />
+        </Box>
+    )
+}
+
+const mediumLevel = (iconSize:number=6, iconContainerSize:number=10) => {
+    return ( 
+        <Box
+            w={iconContainerSize}
+            h={iconContainerSize}
+            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(0, 20, 239, 0.06) 100%)"
+            borderRadius="full"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+            shadow="xl">
+            <Icon as={GiBatteredAxe} w={iconSize} h={iconSize} color="black" />
+        </Box>
+    )
+}
+
+const highLevel = (iconSize:number=6, iconContainerSize:number=10) => {
+    return ( 
+        <Box
+            w={iconContainerSize}
+            h={iconContainerSize}
+            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)"
+            borderRadius="full"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+            shadow="xl">
+            <Icon as={GiAk47} w={iconSize} h={iconSize} color="black" />
+        </Box>
+    )
+}
+
+const veryHighLevel = (iconSize:number=6, iconContainerSize:number=10) => {
+    return ( 
+        <Box
+            w={iconContainerSize}
+            h={iconContainerSize}
+            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)"
+            borderRadius="full"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+            shadow="xl">
+            <Icon as={GiEvilTower} w={iconSize} h={iconSize} color="black" />
+        </Box>
+    )
+}
+
 
 
 const displayComponentLevel = (marketPrice:string, category:string) => {
@@ -196,32 +255,44 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             
             {/* container */}
             {/* <Box style={{ backgroundColor: 'rgba(255, 255, 255, 0.0)', backdropFilter: 'blur(10px)' }}> */}
-            <Box>
+            <Box mt={10}>
                 <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
                     <Heading as={"cite"}>"Je veux monter mon PC, mais je n'y connais rien"</Heading>
                 </Flex>
 
-                <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
-                    <Text as={"b"}>On est là pour toi !</Text>
-                </Flex>
+                <Box mt={10}>
+                    <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
+                        <Text as={"b"}>On est là pour toi !</Text>
+                    </Flex>
+                    
+                    <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl" mt={10}>
+                        <Text as={"b"}>Pas de technique ici, on a déjà noté les composants pour toi</Text>
+                    </Flex>
+                </Box>
 
-                
-                <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
-                    <Text as={"b"}>Pas de technique ici, tu choisis tes composants selon notre système de notation</Text>
-                </Flex>
 
             </Box>
 
 
-            <Flex justifyContent={"center"}>
-                    <Box flexBasis={"25%"} background="red">1</Box>
-                    <Box flexBasis={"25%"} background="red">2</Box>
-                    <Box flexBasis={"25%"} background="red">3</Box>
-                    <Box flexBasis={"25%"} background="red">3</Box>
-                </Flex>
 
 
-                <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} >
+            <Flex justifyContent={"center"} mt={10}>
+                <Box flexBasis="25%"  display="flex" alignItems="center" justifyContent="center">
+                    {lowLevel(40, 40)}
+                </Box>
+                <Box  flexBasis="25%"  display="flex" alignItems="center" justifyContent="center">
+                    {mediumLevel(40,40)}
+                </Box>
+                <Box flexBasis="25%"  display="flex" alignItems="center" justifyContent="center">
+                    {highLevel(40,40)}
+                </Box>
+                <Box flexBasis="25%" display="flex" alignItems="center" justifyContent="center">
+                    {veryHighLevel(40,40)}
+                </Box>
+            </Flex>
+
+
+                <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} mt={10}>
 
                     <Box flexBasis={"25%"} m={1}>
                         <Text color="black">CPU</Text>
@@ -246,7 +317,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                 </Flex>
 
 
-            <Accordion allowMultiple onChange={handleAccordionChange}>
+            <Accordion allowMultiple onChange={handleAccordionChange} mt={10}>
             {
                 categories.map((category:string, index:number) => {
 
