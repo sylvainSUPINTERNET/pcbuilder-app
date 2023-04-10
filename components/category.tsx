@@ -15,8 +15,14 @@ import { Box, Flex, Accordion,
   Stack,
   Divider,
   Skeleton,
-  Heading} from '@chakra-ui/react';
-import { GiAk47, GiBaseballBat, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
+  Heading,
+  Drawer,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerBody,
+  DrawerContent,
+  useDisclosure} from '@chakra-ui/react';
+import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
@@ -30,69 +36,119 @@ type FetchComponentsCategoryProps = {
 
 const lowLevel = (iconSize:number=6, iconContainerSize:number=10) => {
     return ( 
-        <Box
-            w={iconContainerSize}
-            h={iconContainerSize}
-            bgGradient="radial-gradient(circle, rgba(203, 203, 207, 0.84) 0%, rgba(89, 93, 140, 0) 100%)"
-            borderRadius="full"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
-            shadow="xl">
-            <Icon as={GiBaseballBat} w={iconSize} h={iconSize} color="black" />
+        <Box>
+            <Box
+                mb={5} 
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
+                <Box background={"black"} p={4} rounded="lg">
+                    <Text as="b" fontSize={24} color="white">Commun</Text>
+                </Box>
+            </Box>
+            <Box
+                w={iconContainerSize}
+                h={iconContainerSize}
+                border="2px solid black"
+                bgGradient="radial-gradient(circle, rgba(203, 203, 207, 0.84) 0%, rgba(89, 93, 140, 0) 100%)"
+                borderRadius="full"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+                shadow="dark-lg">
+                <Icon as={GiPunch} w={iconSize} h={iconSize} color="black" />
+            </Box>
         </Box>
     )
 }
 
 const mediumLevel = (iconSize:number=6, iconContainerSize:number=10) => {
     return ( 
-        <Box
-            w={iconContainerSize}
-            h={iconContainerSize}
-            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(0, 20, 239, 0.06) 100%)"
-            borderRadius="full"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
-            shadow="xl">
-            <Icon as={GiBatteredAxe} w={iconSize} h={iconSize} color="black" />
+        <Box>
+            <Box
+                mb={5} 
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
+                <Box background={"black"} p={4} rounded="lg">
+                    <Text as="b" fontSize={24} color="blue">Rare</Text>
+                </Box>
+                </Box>
+            <Box
+                w={iconContainerSize}
+                h={iconContainerSize}
+                border="2px solid black"
+                bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(0, 20, 239, 0.06) 100%)"
+                borderRadius="full"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+                shadow="dark-lg">
+                <Icon as={GiBatteredAxe} w={iconSize} h={iconSize} color="black" />
+            </Box>
         </Box>
     )
 }
 
 const highLevel = (iconSize:number=6, iconContainerSize:number=10) => {
-    return ( 
-        <Box
-            w={iconContainerSize}
-            h={iconContainerSize}
-            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)"
-            borderRadius="full"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
-            shadow="xl">
-            <Icon as={GiAk47} w={iconSize} h={iconSize} color="black" />
-        </Box>
+    return (
+        <Box>
+            <Box
+                mb={5} 
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
+                <Box background={"black"} p={4} rounded="lg">
+                    <Text as="b" fontSize={24} color="purple.500">Epique</Text>
+                </Box>
+                </Box>
+            <Box
+                w={iconContainerSize}
+                h={iconContainerSize}
+                border="2px solid black"
+                bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)"
+                borderRadius="full"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+                shadow="dark-lg">
+                <Icon as={GiAk47} w={iconSize} h={iconSize} color="black" />
+            </Box>
+        </Box> 
+
     )
 }
 
 const veryHighLevel = (iconSize:number=6, iconContainerSize:number=10) => {
     return ( 
-        <Box
-            w={iconContainerSize}
-            h={iconContainerSize}
-            bgGradient="radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)"
-            borderRadius="full"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            backdropFilter="blur(10px) brightness(150%) saturate(120%)"
-            shadow="xl">
-            <Icon as={GiEvilTower} w={iconSize} h={iconSize} color="black" />
+        <Box >
+            <Box
+                mb={5} 
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
+                <Box background={"black"} p={4} rounded="lg">
+                    <Text as="b" fontSize={24} color="orange.500">Epique</Text>
+                </Box>
+                </Box>
+            <Box
+                w={iconContainerSize}
+                h={iconContainerSize}
+                border="2px solid black"
+                bgGradient="radial-gradient(circle, rgba(255, 244, 1, 1) 0%, rgba(252,70,107,1) 100%)"
+                borderRadius="full"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                backdropFilter="blur(10px) brightness(150%) saturate(120%)"
+                shadow="dark-lg">
+                <Icon as={GiEvilTower} w={iconSize} h={iconSize} color="black" />
+            </Box>
         </Box>
+
     )
 }
 
@@ -185,6 +241,10 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     const [isLargerThanTablet] = useMediaQuery("(min-width: 48em)");
     const flexBasis = isLargerThanTablet ? "25%" : "50%";
 
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    
+    const [placement, setPlacement] = useState('top')
+
 
     const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
 
@@ -255,66 +315,81 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             
             {/* container */}
             {/* <Box style={{ backgroundColor: 'rgba(255, 255, 255, 0.0)', backdropFilter: 'blur(10px)' }}> */}
-            <Box mt={10}>
-                <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
-                    <Heading as={"cite"}>"Je veux monter mon PC, mais je n'y connais rien"</Heading>
-                </Flex>
 
-                <Box mt={10}>
-                    <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl">
-                        <Text as={"b"}>On est là pour toi !</Text>
-                    </Flex>
-                    
-                    <Flex justifyContent={"center"} mb={3} color={"black"} fontSize="2xl" mt={10}>
-                        <Text as={"b"}>Pas de technique ici, on a déjà noté les composants pour toi</Text>
-                    </Flex>
+
+
+            <Box mt={20} display="flex" justifyContent={"center"} p={5}>
+                <Box>
+
+                <Text as="span" fontSize="26" fontWeight="bold" background="black" p={3} rounded="lg" color="white">
+                    On 
+                    <Box as="span" >
+                        <Box color="white" as="span"> N</Box>
+                        <Box color="blue" as="span">o</Box>
+                        <Box color="purple" as="span">t</Box>
+                        <Box color="orange" as="span">e </Box>
+                    </Box>
+
+                    <Box as="span">
+                        les composants, tu fais ta machine et c'est tout !
+                    </Box>
+                </Text>
                 </Box>
-
-
             </Box>
 
 
 
-
-            <Flex justifyContent={"center"} mt={10}>
-                <Box flexBasis="25%"  display="flex" alignItems="center" justifyContent="center">
+            <Flex justifyContent={"center"} mt={20} mb={20} flexWrap="wrap">
+                <Box flexBasis="25%"  display="flex" alignItems="center" justifyContent="center" p={"2"}>
                     {lowLevel(40, 40)}
                 </Box>
-                <Box  flexBasis="25%"  display="flex" alignItems="center" justifyContent="center">
+                <Box  flexBasis="25%"  display="flex" alignItems="center" justifyContent="center" p={"2"}>
                     {mediumLevel(40,40)}
                 </Box>
-                <Box flexBasis="25%"  display="flex" alignItems="center" justifyContent="center">
+                <Box flexBasis="25%"  display="flex" alignItems="center" justifyContent="center" p={"2"}>
                     {highLevel(40,40)}
                 </Box>
-                <Box flexBasis="25%" display="flex" alignItems="center" justifyContent="center">
+                <Box flexBasis="25%" display="flex" alignItems="center" justifyContent="center" p={"2"}>
                     {veryHighLevel(40,40)}
                 </Box>
             </Flex>
 
 
-                <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} mt={10}>
+            <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} mt={10}>
 
-                    <Box flexBasis={"25%"} m={1}>
-                        <Text color="black">CPU</Text>
-                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                    </Box>
+                <Box flexBasis={"25%"} m={1} onClick={onOpen}>
+                    <Text color="black">CPU</Text>
+                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                </Box>
 
-                    <Box flexBasis={"25%"} m={1}>
-                        <Text color="black">CPU</Text>
-                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                    </Box>
-                    
-                    <Box flexBasis={"25%"} m={1}>
-                        <Text color="black">CPU</Text>
-                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                    </Box>
+                <Box flexBasis={"25%"} m={1}>
+                    <Text color="black">CPU</Text>
+                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                </Box>
+                
+                <Box flexBasis={"25%"} m={1}>
+                    <Text color="black">CPU</Text>
+                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                </Box>
 
-                    <Box flexBasis={"25%"} m={1}>
-                        <Text color="black">CPU</Text>
-                        <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                    </Box>
+                <Box flexBasis={"25%"} m={1}>
+                    <Text color="black">CPU</Text>
+                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                </Box>
 
-                </Flex>
+            </Flex>
+
+            <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
+                <DrawerOverlay />
+                <DrawerContent>
+                <DrawerHeader borderBottomWidth='1px'>CPU</DrawerHeader>
+                <DrawerBody>
+                    <Box onClick={e => console.log(e)}>Some contents...</Box>
+                    <p>Some contents...</p>
+                    <p>Some contents...</p>
+                </DrawerBody>
+                </DrawerContent>
+            </Drawer>
 
 
             <Accordion allowMultiple onChange={handleAccordionChange} mt={10}>

@@ -6,14 +6,12 @@ import "@chakra-ui/react";
 export const Customheader = () => {
     return ( 
     
-    <div>
-        <Head>
-            <title>EZ PC builder</title>
-        </Head>
-
-        <Box p="4" bg="blue.100">
-            <Heading>EZ PC</Heading>
+    <Box>
+        <Box display="flex" justifyContent={"center"} mt={10}>
+            <Box background="black" p={4} rounded="lg">
+                <Text as="b" fontSize={"4xl"} color="white">EZ PC builder</Text>
+            </Box>
         </Box>
 
-    </div>)
+    </Box>)
 }
