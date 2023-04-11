@@ -21,7 +21,10 @@ import { Box, Flex, Accordion,
   DrawerOverlay,
   DrawerBody,
   DrawerContent,
-  useDisclosure} from '@chakra-ui/react';
+  useDisclosure,
+  Grid,
+  GridItem,
+  SimpleGrid} from '@chakra-ui/react';
 import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
@@ -72,7 +75,7 @@ const mediumLevel = (iconSize:number=6, iconContainerSize:number=10) => {
                 justifyContent="center"
                 alignItems="center">
                 <Box background={"black"} p={4} rounded="lg">
-                    <Text as="b" fontSize={24} color="blue">Rare</Text>
+                    <Text as="b" fontSize={24} color="blue.400">Rare</Text>
                 </Box>
                 </Box>
             <Box
@@ -131,7 +134,7 @@ const veryHighLevel = (iconSize:number=6, iconContainerSize:number=10) => {
                 justifyContent="center"
                 alignItems="center">
                 <Box background={"black"} p={4} rounded="lg">
-                    <Text as="b" fontSize={24} color="orange.500">Epique</Text>
+                    <Text as="b" fontSize={24} color="orange.500">Légendaire</Text>
                 </Box>
                 </Box>
             <Box
@@ -354,29 +357,32 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                 </Box>
             </Flex>
 
+            <SimpleGrid columns={2} spacing={10}>
+                <Flex justifyContent="center" width="100%">
+                    <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                </Flex>
+                <Flex justifyContent="center" width="100%">
+                <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                </Flex>
+                <Flex justifyContent="center" width="100%">
+                <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                </Flex>
+                <Flex justifyContent="center" width="100%">
+                <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                </Flex>
+            </SimpleGrid>
 
             <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} mt={10}>
-
-                <Box flexBasis={"25%"} m={1} onClick={onOpen}>
-                    <Text color="black">CPU</Text>
-                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                </Box>
-
-                <Box flexBasis={"25%"} m={1}>
-                    <Text color="black">CPU</Text>
-                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                </Box>
-                
-                <Box flexBasis={"25%"} m={1}>
-                    <Text color="black">CPU</Text>
-                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                </Box>
-
-                <Box flexBasis={"25%"} m={1}>
-                    <Text color="black">CPU</Text>
-                    <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                </Box>
-
+                {
+                    categories.map((category:string, index:number) => {
+                        return ( 
+                            <Box flexBasis={"25%"} m={1} onClick={onOpen}>
+                                <Text color="black">{getProperCatName(category)}</Text>
+                                <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
+                            </Box>
+                        )
+                    })
+                }
             </Flex>
 
             <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
@@ -442,29 +448,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                             })
                     }
                     </Flex>
-{/*                         <List spacing={3}>
-                            
-                            <ListItem>
-                                <ListIcon as={MdCheckCircle} color='green.500' />
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit
-                            </ListItem>
 
-                            <ListItem>
-                                <ListIcon as={MdCheckCircle} color='green.500' />
-                                Assumenda, quia temporibus eveniet a libero incidunt suscipit
-                            </ListItem>
-
-                            <ListItem>
-                                <ListIcon as={MdCheckCircle} color='green.500' />
-                                Quidem, ipsam illum quis sed voluptatum quae eum fugit earum
-                            </ListItem>
-
-                            <ListItem>
-                                <ListIcon as={MdSettings} color='green.500' />
-                                Quidem, ipsam illum quis sed voluptatum quae eum fugit earum
-                            </ListItem>
-
-                        </List> */}
                     </AccordionPanel>
 
                     </AccordionItem>
