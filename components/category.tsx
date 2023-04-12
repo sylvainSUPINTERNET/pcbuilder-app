@@ -244,6 +244,8 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     const [isLargerThanTablet] = useMediaQuery("(min-width: 48em)");
     const flexBasis = isLargerThanTablet ? "25%" : "50%";
 
+    const componentContainer = isLargerThanTablet ? "4" : "2";
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     
     const [placement, setPlacement] = useState('top')
@@ -357,18 +359,18 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                 </Box>
             </Flex>
 
-            <SimpleGrid columns={2} spacing={10}>
+            <SimpleGrid columns={componentContainer} spacing={2} p={2}>
                 <Flex justifyContent="center" width="100%">
-                    <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                    <Box bg="tomato" w="240px" h="240px"/>
                 </Flex>
                 <Flex justifyContent="center" width="100%">
-                <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                    <Box bg="tomato" w="240px" h="240px" />
                 </Flex>
                 <Flex justifyContent="center" width="100%">
-                <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                    <Box bg="tomato" w="240px" h="240px" />
                 </Flex>
                 <Flex justifyContent="center" width="100%">
-                <Box bg="tomato" w="240px" h="240px" borderRadius="full" />
+                    <Box bg="tomato" w="240px" h="240px"/>
                 </Flex>
             </SimpleGrid>
 
