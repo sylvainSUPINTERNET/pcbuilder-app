@@ -24,7 +24,8 @@ import { Box, Flex, Accordion,
   useDisclosure,
   Grid,
   GridItem,
-  SimpleGrid} from '@chakra-ui/react';
+  SimpleGrid,
+  DrawerCloseButton} from '@chakra-ui/react';
 import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
 import { useEffect, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
@@ -280,22 +281,28 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     
     const [placement, setPlacement] = useState('top')
 
+    const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
+
+
 
     const [drawerData, setDrawerData] = useState({
-        "catName": ""
+        "catName": "",
+        "data": []
     });
 
-    const handleOpen = (cat:string) => {
-        console.log(cat)
 
-        // TODO : get data from supabase to display into the slider ( top )
+    // TODO : reimplement cache !
+    const handleOpen = async (cat:string, i:number) => {
+        
+        const {data, error} = await componentsRepository.getComponentsByCategory(supabaseClient, categories[i]);
         drawerData.catName = cat
+        drawerData.data = data;
+
         setDrawerData(drawerData);
         onOpen();
     }
 
 
-    const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
 
     // One the first time we click on tab, data is stored into state for caching and if we reclick , just get data from it, call is not required
     const handleAccordionChange = async (openIndexes:any) => {
@@ -408,7 +415,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     sortComponentsWithWeights(categories).map((category:string, index:number) => {
                         return ( 
                             <Flex justifyContent="center" width="100%" >
-                                <Box bg="tomato" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category)}}>
+                                <Box bg="tomato" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category, index)}}>
                                     <Text>{getProperCatName(category)}</Text>
                                 </Box>
                             </Flex>
@@ -420,11 +427,40 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>
+                <DrawerCloseButton />
                 <DrawerHeader borderBottomWidth='1px'>{getProperCatName(drawerData.catName)}</DrawerHeader>
                 <DrawerBody>
-                    <Box onClick={e => console.log(e)}>Some contents...</Box>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    <Box>{drawerData.data.length} composants</Box>
+                    
+                    {
+                        drawerData.data && drawerData.data.sort( (a:any,b:any) => a.price_market - b.price_market).map((component:any) => {
+                                return (
+                                <Box flexBasis={flexBasis} p={4} mb={10} borderWidth={1}>
+                                    <Box display="flex" justifyContent="center" p={4}>
+                                        <Text as='b' fontSize="xl">{component.label}</Text>
+                                    </Box>
+                                    <Box display="flex" justifyContent="center">
+                                        <Image src={`/medias/${component.hash}_${component.media_path.split("_")[component.media_path.split("_").length-1]}`} alt={`${component.label}`} width={160} height={160} />
+                                    </Box>
+                                    <Box display="flex" justifyContent="end" p={4}>
+                                        {displayComponentLevel(component.price_market, component.category)}
+                                    </Box>
+                                    
+                                    <Box display="flex" justifyContent="center" mt={2}>
+                                        <Text as='b'>Estimé à 
+                                            <Box bgGradient="linear(to-l, #ff00cc,#333399)" 
+                                            bgClip="text"
+                                            fontSize="6xl"
+                                            fontWeight="extrabold">
+                                                {displayAsPrice(component.price_market)}
+                                            </Box>
+                                        </Text>
+                                    </Box>
+
+                                </Box>)
+                            })
+                    }
+
                 </DrawerBody>
                 </DrawerContent>
             </Drawer>
