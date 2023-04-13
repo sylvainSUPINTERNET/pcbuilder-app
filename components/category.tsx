@@ -37,6 +37,36 @@ type FetchComponentsCategoryProps = {
 };
 
 
+const sortComponentsWithWeights = ( categories: string[] ) => {
+
+    const weights = ["CPU", "MOTHERBOARD", "GPU", "VENTIRAD", "RAM", "BOX","POWER_SUPPLY", "TERMAL_PASTE", "M2", "SSD1", "HDD", "MOUSE","MONITOR", "KEYBOARD"];
+
+
+    for ( const i in weights ) {
+        const idxSwap = weights.indexOf(weights[i]);
+      
+      
+        if ( idxSwap != -1 ) {
+          
+          const idxCurr = categories.indexOf(categories.filter(el => el === weights[idxSwap]).length > 0 ? categories.filter(el => el === weights[idxSwap])[0] : "")
+      
+          if ( idxCurr != -1 ) {
+            
+                const val1 = categories[idxCurr]; // ps
+                const val2 = categories[idxSwap]; // cpu idx
+                categories[idxCurr] = val2
+                categories[idxSwap] = val1
+              
+          }
+      
+          
+        }
+        
+      }
+
+    return categories;
+}
+
 const lowLevel = (iconSize:number=6, iconContainerSize:number=10) => {
     return ( 
         <Box>
@@ -221,11 +251,11 @@ const getProperCatName = (cat:string) : string => {
         case "monitor":
             return "Ecran".toUpperCase();
         case "hdd":
-            return "Stockage HDD".toUpperCase();
+            return "HDD".toUpperCase();
         case "ssd1":
-            return "Stockage SSD".toUpperCase();
+            return "SSD".toUpperCase();
         case "m2":
-            return "Stockage M2".toUpperCase();
+            return "SSD M.2".toUpperCase();
         case "termal_paste":
             return "Pâte thermique".toUpperCase();
         default:
@@ -244,11 +274,25 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     const [isLargerThanTablet] = useMediaQuery("(min-width: 48em)");
     const flexBasis = isLargerThanTablet ? "25%" : "50%";
 
-    const componentContainer = isLargerThanTablet ? "4" : "2";
+    const componentContainer:number = isLargerThanTablet ? 4 : 2;
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     
     const [placement, setPlacement] = useState('top')
+
+
+    const [drawerData, setDrawerData] = useState({
+        "catName": ""
+    });
+
+    const handleOpen = (cat:string) => {
+        console.log(cat)
+
+        // TODO : get data from supabase to display into the slider ( top )
+        drawerData.catName = cat
+        setDrawerData(drawerData);
+        onOpen();
+    }
 
 
     const [cacheDataComponents, setCacheDataComponents] = useState<any>(new Map());
@@ -360,37 +404,23 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             </Flex>
 
             <SimpleGrid columns={componentContainer} spacing={2} p={2}>
-                <Flex justifyContent="center" width="100%">
-                    <Box bg="tomato" w="240px" h="240px"/>
-                </Flex>
-                <Flex justifyContent="center" width="100%">
-                    <Box bg="tomato" w="240px" h="240px" />
-                </Flex>
-                <Flex justifyContent="center" width="100%">
-                    <Box bg="tomato" w="240px" h="240px" />
-                </Flex>
-                <Flex justifyContent="center" width="100%">
-                    <Box bg="tomato" w="240px" h="240px"/>
-                </Flex>
-            </SimpleGrid>
-
-            <Flex display={"flex"} justifyContent={"center"} flexWrap={"wrap"} mt={10}>
-                {
-                    categories.map((category:string, index:number) => {
+            {
+                    sortComponentsWithWeights(categories).map((category:string, index:number) => {
                         return ( 
-                            <Box flexBasis={"25%"} m={1} onClick={onOpen}>
-                                <Text color="black">{getProperCatName(category)}</Text>
-                                <Skeleton startColor='red.500' endColor='orange.500' height='15vh' rounded={"lg"}/>
-                            </Box>
+                            <Flex justifyContent="center" width="100%" >
+                                <Box bg="tomato" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category)}}>
+                                    <Text>{getProperCatName(category)}</Text>
+                                </Box>
+                            </Flex>
                         )
                     })
                 }
-            </Flex>
+            </SimpleGrid>
 
             <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>
-                <DrawerHeader borderBottomWidth='1px'>CPU</DrawerHeader>
+                <DrawerHeader borderBottomWidth='1px'>{getProperCatName(drawerData.catName)}</DrawerHeader>
                 <DrawerBody>
                     <Box onClick={e => console.log(e)}>Some contents...</Box>
                     <p>Some contents...</p>
