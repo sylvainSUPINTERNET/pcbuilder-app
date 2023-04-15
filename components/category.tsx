@@ -27,7 +27,7 @@ import { Box, Flex, Accordion,
   SimpleGrid,
   DrawerCloseButton} from '@chakra-ui/react';
 import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
 import {RiSeparator} from 'react-icons/ri';
@@ -285,6 +285,8 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
 
 
 
+    const [drawerComponentsClickedMap, setDrawerComponentsClickedMap] = useState<any>(new Map());
+
     const [drawerData, setDrawerData] = useState({
         "catName": "",
         "data": []
@@ -300,6 +302,14 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
 
         setDrawerData(drawerData);
         onOpen();
+    }
+
+
+    const clickComponentInDrawer = async (component:any, catName: string) => {
+
+        drawerComponentsClickedMap.set(catName, component);
+        setDrawerComponentsClickedMap(drawerComponentsClickedMap);
+        onClose();
     }
 
 
@@ -415,8 +425,9 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     sortComponentsWithWeights(categories).map((category:string, index:number) => {
                         return ( 
                             <Flex justifyContent="center" width="100%" >
-                                <Box bg="tomato" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category, index)}}>
+                                <Box bg="tomato" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category, index)}} cursor={"pointer"}>
                                     <Text>{getProperCatName(category)}</Text>
+                                    <Text>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
                                 </Box>
                             </Flex>
                         )
@@ -435,7 +446,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     {
                         drawerData.data && drawerData.data.sort( (a:any,b:any) => a.price_market - b.price_market).map((component:any) => {
                                 return (
-                                <Box flexBasis={flexBasis} p={4} mb={10} borderWidth={1}>
+                                <Box flexBasis={flexBasis} p={4} mb={10} borderWidth={1} cursor={"pointer"} onClick={ e => clickComponentInDrawer(component, drawerData.catName)}>
                                     <Box display="flex" justifyContent="center" p={4}>
                                         <Text as='b' fontSize="xl">{component.label}</Text>
                                     </Box>
