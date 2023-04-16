@@ -273,10 +273,13 @@ const getProperCatName = (cat:string) : string => {
 // TODO : for cache could consider redis instead ( with TTL key ) but since values are not changing often, it's not a big deal
 export const FetchComponentsCategory = ({categories, supabaseClient}:FetchComponentsCategoryProps) => {
 
-    const [isLargerThanTablet] = useMediaQuery("(min-width: 48em)");
+    const [isLargerThanTablet] = useMediaQuery("(min-width: 1600px)");
+    const [isTablet] = useMediaQuery("(min-width: 700px) and (max-width: 1200px)");
+    
     const flexBasis = isLargerThanTablet ? "25%" : "50%";
 
-    const componentContainer:number = isLargerThanTablet ? 4 : 2;
+    const componentContainer: number = isLargerThanTablet ? 4 : isTablet ? 2 : 1;
+    
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     
@@ -315,7 +318,10 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
 
 
     const deleteComponent = async () => {
-        console.log("Delete component");
+        console.log("delete")
+        const newClickedMap = new Map(drawerComponentsClickedMap);
+        newClickedMap.delete(drawerData.catName);
+        setDrawerComponentsClickedMap(newClickedMap);
     }
 
 
@@ -431,19 +437,31 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     sortComponentsWithWeights(categories).map((category:string, index:number) => {
                         return ( 
                             <Flex justifyContent="center" width="100%" >
-                                <Box bg="" w="450px" h="450px" rounded={"lg"} p={4}  border={"black solid 3px"} shadow="lg" mb="2">
+                                <Box bg="" w="500px" h="500px" rounded={"lg"} p={4}  border={"black solid 3px"} shadow="lg" mb="2">
                                     
                                     {
-                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 ?
+                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 &&
                                         (<Flex justifyContent={"center"}>
                                             <Button colorScheme="red" mb={5} onClick={deleteComponent}>
                                                 <Icon as={GiTrashCan} w={8} h={8} mb={2} p={1}/>
                                                 Supprimer
                                             </Button>
                                         </Flex>
+                                        )
+                                    }
+
+                                    
+                                    <Flex justifyContent={"center"}>
+                                        <Text as={"b"} fontSize="xl" p={4}>{getProperCatName(category)}</Text>
+                                    </Flex>
+
+                                    {
+                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 ?
+                                        (
+                                            <></>
                                         ):(
-                                            <Flex onClick={ () => {handleOpen(category, index)}} cursor={"pointer"} justifyContent="center">
-                                                <Button mb={3}>
+                                            <Flex cursor={"pointer"} justifyContent="center">
+                                                <Button mb={3} onClick={ () => {handleOpen(category, index)}} >
                                                     <Icon as={AiOutlinePlus} w={8} h={8} mb={1} p={1}/>
                                                     Ajouter un composant
                                                 </Button>
@@ -451,8 +469,6 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                                         )
                                     }
 
-
-                                    <Text as={"b"} p={4}>{getProperCatName(category)}</Text>
                                     <Text mt={4}>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
                                     {
                                         drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).hash && drawerComponentsClickedMap.get(category).price_market && drawerComponentsClickedMap.get(category).media_path && <Box>
@@ -516,7 +532,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                 </DrawerContent>
             </Drawer>
 
-
+{/* 
             <Accordion allowMultiple onChange={handleAccordionChange} mt={10}>
             {
                 categories.map((category:string, index:number) => {
@@ -575,7 +591,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
             })
             }
 
-            </Accordion>
+            </Accordion> */}
         </>
     );
 }
