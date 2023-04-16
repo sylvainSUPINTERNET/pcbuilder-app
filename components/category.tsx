@@ -190,15 +190,6 @@ const veryHighLevel = (iconSize:number=6, iconContainerSize:number=10) => {
 
 
 const displayComponentLevel = (marketPrice:string, category:string) => {
-    // GiPunchBlast => bad
-    // GiPointySword => medium
-    // GiAk47 => good
-    // GiUfo => very good
-
-    // GiCrackedSaber => dogshit
-
-    // TODO implements rules
-
     return ( 
         <Box
             w={10}
@@ -273,7 +264,7 @@ const getProperCatName = (cat:string) : string => {
 // TODO : for cache could consider redis instead ( with TTL key ) but since values are not changing often, it's not a big deal
 export const FetchComponentsCategory = ({categories, supabaseClient}:FetchComponentsCategoryProps) => {
 
-    const [isLargerThanTablet] = useMediaQuery("(min-width: 1600px)");
+    const [isLargerThanTablet] = useMediaQuery("(min-width: 1280px)");
     const [isTablet] = useMediaQuery("(min-width: 700px) and (max-width: 1200px)");
     
     const flexBasis = isLargerThanTablet ? "25%" : "50%";
@@ -317,10 +308,9 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     }
 
 
-    const deleteComponent = async () => {
-        console.log("delete")
+    const deleteComponent = (cat:string) => {
         const newClickedMap = new Map(drawerComponentsClickedMap);
-        newClickedMap.delete(drawerData.catName);
+        newClickedMap.delete(cat);
         setDrawerComponentsClickedMap(newClickedMap);
     }
 
@@ -442,7 +432,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                                     {
                                         drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 &&
                                         (<Flex justifyContent={"center"}>
-                                            <Button colorScheme="red" mb={5} onClick={deleteComponent}>
+                                            <Button colorScheme="red" mb={5} onClick={ e => deleteComponent(category)}>
                                                 <Icon as={GiTrashCan} w={8} h={8} mb={2} p={1}/>
                                                 Supprimer
                                             </Button>
@@ -469,21 +459,29 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                                         )
                                     }
 
-                                    <Text mt={4}>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
+                                    <Flex justifyContent={"center"}>
+                                        <Text mt={4}>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
+                                    </Flex>
                                     {
                                         drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).hash && drawerComponentsClickedMap.get(category).price_market && drawerComponentsClickedMap.get(category).media_path && <Box>
-                                            <Box display="flex" justifyContent={"center"} mt={3} p={2}>
-                                                <Text as="b" fontSize={"2xl"}>
-                                                    {displayAsPrice(drawerComponentsClickedMap.get(category).price_market)}
-                                                </Text>
-                                            </Box>
                                             
-                                            <Box display="flex" justifyContent="center" mt={10}>
-                                                <Image src={`/medias/${drawerComponentsClickedMap.get(category).hash}_${drawerComponentsClickedMap.get(category).media_path.split("_")[drawerComponentsClickedMap.get(category).media_path.split("_").length-1]}`} alt={`${drawerComponentsClickedMap.get(category).label}`} width={160} height={160} />
+                                            <Box onClick={ () => {handleOpen(category, index)}}>
+                                                <Box display="flex" justifyContent="center" mt={10}>
+                                                    <Image src={`/medias/${drawerComponentsClickedMap.get(category).hash}_${drawerComponentsClickedMap.get(category).media_path.split("_")[drawerComponentsClickedMap.get(category).media_path.split("_").length-1]}`} alt={`${drawerComponentsClickedMap.get(category).label}`} width={160} height={160} />
+                                                </Box>
+
+                                                <Box display="flex" justifyContent={"center"} mt={3} p={2}>
+                                                    <Text as="b" fontSize={"2xl"}>
+                                                        {displayAsPrice(drawerComponentsClickedMap.get(category).price_market)}
+                                                    </Text>
+                                                </Box>
+
                                             </Box>
+ 
                                             
                                         </Box>
                                     }
+                                    
                                 </Box>
                             </Flex>
                         )
@@ -498,7 +496,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                 <DrawerHeader borderBottomWidth='1px'>{getProperCatName(drawerData.catName)}</DrawerHeader>
                 <DrawerBody>
                     <Box>{drawerData.data.length} composants</Box>
-                    
+                    <SimpleGrid columns={componentContainer} spacing={2} p={2}>
                     {
                         drawerData.data && drawerData.data.sort( (a:any,b:any) => a.price_market - b.price_market).map((component:any) => {
                                 return (
@@ -527,6 +525,7 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                                 </Box>)
                             })
                     }
+                    </SimpleGrid>
 
                 </DrawerBody>
                 </DrawerContent>
