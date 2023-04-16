@@ -25,8 +25,9 @@ import { Box, Flex, Accordion,
   Grid,
   GridItem,
   SimpleGrid,
-  DrawerCloseButton} from '@chakra-ui/react';
-import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing } from 'react-icons/gi';
+  DrawerCloseButton,
+  Button} from '@chakra-ui/react';
+import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword, GiSwordSmithing,GiTrashCan } from 'react-icons/gi';
 import { useEffect, useRef, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
@@ -425,9 +426,28 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     sortComponentsWithWeights(categories).map((category:string, index:number) => {
                         return ( 
                             <Flex justifyContent="center" width="100%" >
-                                <Box bg="tomato" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category, index)}} cursor={"pointer"}>
+                                <Box bg="" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category, index)}} cursor={"pointer"} border={"black solid 3px"} shadow="lg" mb="2">
+                                    
+                                    {
+                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 &&
+                                        (<Flex justifyContent={"end"}>
+                                            <Button colorScheme="red">
+                                                <Icon as={GiTrashCan} w={8} h={8} mb={2} p={1}/>
+                                                Supprimer
+                                            </Button>
+                                        </Flex>
+                                        )
+                                    }
+
                                     <Text>{getProperCatName(category)}</Text>
                                     <Text>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
+                                    {
+                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).hash && drawerComponentsClickedMap.get(category).price_market && drawerComponentsClickedMap.get(category).media_path && <Box>
+                                            <Box display="flex" justifyContent="center">
+                                                <Image src={`/medias/${drawerComponentsClickedMap.get(category).hash}_${drawerComponentsClickedMap.get(category).media_path.split("_")[drawerComponentsClickedMap.get(category).media_path.split("_").length-1]}`} alt={`${drawerComponentsClickedMap.get(category).label}`} width={160} height={160} />
+                                            </Box>
+                                        </Box>
+                                    }
                                 </Box>
                             </Flex>
                         )
