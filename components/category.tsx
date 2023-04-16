@@ -31,7 +31,7 @@ import { GiAk47, GiPunch, GiBatteredAxe, GiElfHelmet, GiEvilTower, GiPointySword
 import { useEffect, useRef, useState } from 'react';
 import { componentsRepository } from '@/repositories/functions';
 import Image from "next/image";
-import {RiSeparator} from 'react-icons/ri';
+import {AiOutlinePlus} from 'react-icons/ai';
 
 type FetchComponentsCategoryProps = {
     categories: Array<string>;
@@ -314,6 +314,11 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
     }
 
 
+    const deleteComponent = async () => {
+        console.log("Delete component");
+    }
+
+
 
     // One the first time we click on tab, data is stored into state for caching and if we reclick , just get data from it, call is not required
     const handleAccordionChange = async (openIndexes:any) => {
@@ -426,26 +431,41 @@ export const FetchComponentsCategory = ({categories, supabaseClient}:FetchCompon
                     sortComponentsWithWeights(categories).map((category:string, index:number) => {
                         return ( 
                             <Flex justifyContent="center" width="100%" >
-                                <Box bg="" w="400px" h="240px" rounded={"lg"} p={4} onClick={ () => {handleOpen(category, index)}} cursor={"pointer"} border={"black solid 3px"} shadow="lg" mb="2">
+                                <Box bg="" w="450px" h="450px" rounded={"lg"} p={4}  border={"black solid 3px"} shadow="lg" mb="2">
                                     
                                     {
-                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 &&
-                                        (<Flex justifyContent={"end"}>
-                                            <Button colorScheme="red">
+                                        drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).label && drawerComponentsClickedMap.get(category).label.length>0 ?
+                                        (<Flex justifyContent={"center"}>
+                                            <Button colorScheme="red" mb={5} onClick={deleteComponent}>
                                                 <Icon as={GiTrashCan} w={8} h={8} mb={2} p={1}/>
                                                 Supprimer
                                             </Button>
                                         </Flex>
+                                        ):(
+                                            <Flex onClick={ () => {handleOpen(category, index)}} cursor={"pointer"} justifyContent="center">
+                                                <Button mb={3}>
+                                                    <Icon as={AiOutlinePlus} w={8} h={8} mb={1} p={1}/>
+                                                    Ajouter un composant
+                                                </Button>
+                                            </Flex>
                                         )
                                     }
 
-                                    <Text>{getProperCatName(category)}</Text>
-                                    <Text>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
+
+                                    <Text as={"b"} p={4}>{getProperCatName(category)}</Text>
+                                    <Text mt={4}>{drawerComponentsClickedMap.get(category) ? drawerComponentsClickedMap.get(category).label : ""}</Text>
                                     {
                                         drawerComponentsClickedMap.get(category) && drawerComponentsClickedMap.get(category).hash && drawerComponentsClickedMap.get(category).price_market && drawerComponentsClickedMap.get(category).media_path && <Box>
-                                            <Box display="flex" justifyContent="center">
+                                            <Box display="flex" justifyContent={"center"} mt={3} p={2}>
+                                                <Text as="b" fontSize={"2xl"}>
+                                                    {displayAsPrice(drawerComponentsClickedMap.get(category).price_market)}
+                                                </Text>
+                                            </Box>
+                                            
+                                            <Box display="flex" justifyContent="center" mt={10}>
                                                 <Image src={`/medias/${drawerComponentsClickedMap.get(category).hash}_${drawerComponentsClickedMap.get(category).media_path.split("_")[drawerComponentsClickedMap.get(category).media_path.split("_").length-1]}`} alt={`${drawerComponentsClickedMap.get(category).label}`} width={160} height={160} />
                                             </Box>
+                                            
                                         </Box>
                                     }
                                 </Box>
